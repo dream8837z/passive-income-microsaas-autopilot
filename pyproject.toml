@@ -1,0 +1,10 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "passive-income-microsaas-autopilot"
+version = "1.0.0"
+description = "Automated Vibe-Coded B2B Micro-SaaS & 2027 Global Passive Income pSEO Pipeline"
+requires-python = ">=3.10"
+dependencies = []
