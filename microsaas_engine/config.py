@@ -41,6 +41,8 @@ def _load_dotenv(env_path: Path) -> None:
 
 def load_config(project_root: Path | None = None) -> SiteConfig:
     root = project_root or Path(__file__).resolve().parent.parent
+    if not root.is_dir():
+        root = Path.cwd()
     _load_dotenv(root / ".env")
     site_url = os.environ.get(
         "SITE_URL",
