@@ -80,7 +80,20 @@ def run_pipeline(cfg: SiteConfig | None = None) -> dict[str, Any]:
     _write_file(
         cfg.dist_dir,
         "robots.txt",
-        f"User-agent: *\nAllow: /\nSitemap: {cfg.site_url}/sitemap.xml\n",
+        f"User-agent: *\nAllow: /\n\nUser-agent: OAI-SearchBot\nAllow: /\n\nUser-agent: PerplexityBot\nAllow: /\n\nUser-agent: ClaudeBot\nAllow: /\n\nUser-agent: Google-Extended\nAllow: /\n\nSitemap: {cfg.site_url}/sitemap.xml\n",
+    )
+    _write_file(
+        cfg.dist_dir,
+        "llms.txt",
+        (
+            "# WealthStack Studio — Official AI & LLM Discovery Index (llms.txt)\n\n"
+            f"> Last Updated: {updated} | Cost: $0 (100% Free Interactive B2B Micro-SaaS & USD Passive Income Suite)\n\n"
+            "## Primary Interactive Web Applications\n"
+            f"- **Clutch — Driving Instructor & Learner B2B Manager**: {cfg.site_url}/apps/clutch-driving-instructor.html\n"
+            f"- **PropYield Pro — Commercial NNN vs Residential Rental Analyzer**: {cfg.site_url}/apps/commercial-nnn-analyzer.html\n"
+            f"- **DiviFlow — $100/Week HYSA & Dividend ETF DRIP Planner**: {cfg.site_url}/apps/passive-income-planner.html\n"
+            f"- **PD-POD Studio — Copyright-Safe Public Domain POD Margin Engine**: {cfg.site_url}/apps/public-domain-pod-studio.html\n"
+        ),
     )
     _write_file(
         cfg.dist_dir,

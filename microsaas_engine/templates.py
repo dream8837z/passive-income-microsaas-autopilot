@@ -239,6 +239,46 @@ def render_ad_slot(cfg: SiteConfig, slot_name: str = "content") -> str:
     )
 
 
+def render_monetization_cta(cfg: SiteConfig, rel_path: str, prefix: str) -> str:
+    """Category-matched high-intent Affiliate & Gumroad Digital Product CTA box."""
+    if rel_path.startswith("hysa/"):
+        aff_url = cfg.affiliate_hysa_url or f"{prefix}apps/passive-income-planner.html"
+        aff_title = "Compare Top 4.20%–5.00% APY FDIC-Insured High-Yield Accounts"
+        aff_btn = "Check Latest High-Yield Savings Rates →"
+    elif rel_path.startswith("dividend/"):
+        aff_url = cfg.affiliate_broker_url or f"{prefix}apps/passive-income-planner.html"
+        aff_title = "Automate Fractional Dividend ETF & DRIP Investing ($1 Minimum)"
+        aff_btn = "Open Dividend DRIP Portfolio Planner →"
+    elif rel_path.startswith("pod/") or "pod-studio" in rel_path:
+        aff_url = cfg.affiliate_pod_url or f"{prefix}apps/public-domain-pod-studio.html"
+        aff_title = "Launch Your Zero-Inventory Print-on-Demand Store (Gelato / Etsy)"
+        aff_btn = "Open Public Domain SVG & Margin Studio →"
+    else:
+        aff_url = cfg.affiliate_property_url or f"{prefix}apps/commercial-nnn-analyzer.html"
+        aff_title = "Model Commercial NNN Leases vs Leveraged Rentals Before You Buy"
+        aff_btn = "Run Full NNN Cash-Flow Stress Test →"
+
+    gumroad_url = cfg.gumroad_product_url or f"{prefix}apps/commercial-nnn-analyzer.html"
+    return f"""
+    <section class="card no-print" style="border-color:rgba(56,189,248,0.45);background:linear-gradient(135deg,rgba(56,189,248,0.10),rgba(34,197,94,0.08))">
+      <div class="grid-2">
+        <div>
+          <span class="badge">Partner Tool &amp; Rate Comparison</span>
+          <h3>{html.escape(aff_title)}</h3>
+          <p class="muted" style="font-size:0.88rem">Stop losing passive yield to 0.38% bank rates or negative-cash-flow rentals. Verify your numbers with our real-time benchmark suite.</p>
+          <a class="btn btn-sm" href="{html.escape(aff_url)}" rel="sponsored noopener">{html.escape(aff_btn)}</a>
+        </div>
+        <div>
+          <span class="badge green">Pro Digital Download Pack</span>
+          <h3>2027 Passive Income, DRIP &amp; Commercial NNN Pro Spreadsheet Pack</h3>
+          <p class="muted" style="font-size:0.88rem">Get all 40 pre-built Commercial NNN vs Residential cash-flow models, HYSA/Dividend goal matrices ($50/wk–$1,000/day), Google Sheets formulas, and 12 Public Domain POD blueprints.</p>
+          <a class="btn green btn-sm" href="{html.escape(gumroad_url)}" rel="noopener">Get Pro Spreadsheet &amp; Notion Pack →</a>
+        </div>
+      </div>
+    </section>
+    """
+
+
 def render_page(
     cfg: SiteConfig,
     rel_path: str,
@@ -306,6 +346,7 @@ def render_page(
   </header>
   <main class="wrap">
     {body_html}
+    {render_monetization_cta(cfg, rel_path, prefix)}
     <footer>
       <p><strong>WealthStack Studio</strong> — Free Vibe-Coded B2B Micro-SaaS &amp; 2027 Passive Income Calculator Suite. Auto-synced daily ({html.escape(updated_date)}).</p>
       <p>
@@ -318,6 +359,27 @@ def render_page(
       </p>
     </footer>
   </main>
+  <script>
+  (function(){{
+    try {{
+      var ref = (document.referrer || '').toLowerCase();
+      var params = new URLSearchParams(window.location.search);
+      var ch = params.get('utm_source') || 'direct_or_organic';
+      if (ref.indexOf('chatgpt.com') >= 0 || ref.indexOf('openai.com') >= 0) ch = 'ai_chatgpt_search';
+      else if (ref.indexOf('perplexity.ai') >= 0) ch = 'ai_perplexity';
+      else if (ref.indexOf('claude.ai') >= 0) ch = 'ai_claude';
+      else if (ref.indexOf('gemini.google.com') >= 0) ch = 'ai_gemini';
+      else if (ref.indexOf('google.') >= 0) ch = 'seo_google';
+      if (!localStorage.getItem('bm_first_channel')) localStorage.setItem('bm_first_channel', ch);
+      localStorage.setItem('bm_last_channel', ch);
+      window.__BORING_ATTRIBUTION__ = {{
+        first_touch: localStorage.getItem('bm_first_channel'),
+        last_touch: ch,
+        hook_id: params.get('utm_content') || 'organic_aio'
+      }};
+    }} catch (e) {{}}
+  }})();
+  </script>
 </body>
 </html>
 """

@@ -1,6 +1,7 @@
 __pycache__/
 *.pyc
 .env
+.kakao_tokens.json
 dist/
 data/live_cache.json
 .DS_Store

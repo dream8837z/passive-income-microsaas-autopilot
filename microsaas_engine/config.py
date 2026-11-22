@@ -1,4 +1,4 @@
-"""Configuration loader with safe defaults for zero-touch CI/CD execution."""
+"""Configuration loader with affiliate & digital product slots for zero-touch CI/CD."""
 from __future__ import annotations
 
 import os
@@ -17,6 +17,11 @@ class SiteConfig:
     dry_run: bool
     dist_dir: Path
     data_dir: Path
+    affiliate_hysa_url: str = ""
+    affiliate_broker_url: str = ""
+    affiliate_pod_url: str = ""
+    affiliate_property_url: str = ""
+    gumroad_product_url: str = ""
 
     @property
     def adsense_pub_id(self) -> str:
@@ -54,20 +59,16 @@ def load_config(project_root: Path | None = None) -> SiteConfig:
             "WealthStack Studio — Free AI Micro-SaaS & Passive Income Calculators",
         ),
         site_url=site_url,
-        root_portal_url=os.environ.get(
-            "ROOT_PORTAL_URL",
-            "https://dream8837z.github.io/",
-        ),
-        kr_hub_url=os.environ.get(
-            "KR_HUB_URL",
-            "https://dream8837z.github.io/pseo-revenue-autopilot/",
-        ),
-        adsense_client_id=os.environ.get(
-            "ADSENSE_CLIENT_ID",
-            "ca-pub-9014872001634608",
-        ),
+        root_portal_url=os.environ.get("ROOT_PORTAL_URL", "https://dream8837z.github.io/"),
+        kr_hub_url=os.environ.get("KR_HUB_URL", "https://dream8837z.github.io/pseo-revenue-autopilot/"),
+        adsense_client_id=os.environ.get("ADSENSE_CLIENT_ID", "ca-pub-9014872001634608"),
         contact_email=os.environ.get("CONTACT_EMAIL", "contact@wealthstack.studio"),
         dry_run=os.environ.get("DRY_RUN", "false").lower() == "true",
         dist_dir=root / "dist",
         data_dir=root / "data",
+        affiliate_hysa_url=os.environ.get("AFFILIATE_HYSA_URL", "").strip(),
+        affiliate_broker_url=os.environ.get("AFFILIATE_BROKER_URL", "").strip(),
+        affiliate_pod_url=os.environ.get("AFFILIATE_POD_URL", "").strip(),
+        affiliate_property_url=os.environ.get("AFFILIATE_PROPERTY_URL", "").strip(),
+        gumroad_product_url=os.environ.get("GUMROAD_PRODUCT_URL", "").strip(),
     )
