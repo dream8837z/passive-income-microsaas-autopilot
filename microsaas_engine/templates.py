@@ -263,16 +263,17 @@ def render_monetization_cta(cfg: SiteConfig, rel_path: str, prefix: str) -> str:
     <section class="card no-print" style="border-color:rgba(56,189,248,0.45);background:linear-gradient(135deg,rgba(56,189,248,0.10),rgba(34,197,94,0.08))">
       <div class="grid-2">
         <div>
-          <span class="badge">Partner Tool &amp; Rate Comparison</span>
-          <h3>{html.escape(aff_title)}</h3>
-          <p class="muted" style="font-size:0.88rem">Stop losing passive yield to 0.38% bank rates or negative-cash-flow rentals. Verify your numbers with our real-time benchmark suite.</p>
-          <a class="btn btn-sm" href="{html.escape(aff_url)}" rel="sponsored noopener">{html.escape(aff_btn)}</a>
+          <span class="badge">쿠팡 파트너스 추천 특가 (ID: {html.escape(cfg.coupang_partner_id)})</span>
+          <h3>{html.escape(aff_title)} · 오늘의 쿠팡 로켓배송 골드박스 특가</h3>
+          <p class="muted" style="font-size:0.88rem">재테크·홈오피스·크리에이터 장비 및 매일 업데이트되는 쿠팡 골드박스 일일특가·로켓배송 할인을 확인하세요.</p>
+          <a class="btn btn-sm" href="{html.escape(aff_url)}" target="_blank" rel="nofollow sponsored noopener">쿠팡 로켓배송·골드박스 특가 바로가기 →</a>
+          <p class="muted" style="font-size:0.75rem;margin-top:8px">※ 이 포스팅은 쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의 수수료를 제공받습니다.</p>
         </div>
         <div>
           <span class="badge green">Pro Digital Download Pack</span>
           <h3>2027 Passive Income, DRIP &amp; Commercial NNN Pro Spreadsheet Pack</h3>
           <p class="muted" style="font-size:0.88rem">Get all 40 pre-built Commercial NNN vs Residential cash-flow models, HYSA/Dividend goal matrices ($50/wk–$1,000/day), Google Sheets formulas, and 12 Public Domain POD blueprints.</p>
-          <a class="btn green btn-sm" href="{html.escape(gumroad_url)}" rel="noopener">Get Pro Spreadsheet &amp; Notion Pack →</a>
+          <a class="btn green btn-sm" href="{html.escape(gumroad_url)}" target="_blank" rel="noopener">Download Pro Spreadsheet &amp; Notion Pack (.ZIP) →</a>
         </div>
       </div>
     </section>

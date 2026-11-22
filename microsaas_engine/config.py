@@ -1,4 +1,4 @@
-"""Configuration loader with affiliate & digital product slots for zero-touch CI/CD."""
+"""Configuration loader with Coupang Partners (AF9272027) & GitHub Release defaults."""
 from __future__ import annotations
 
 import os
@@ -17,11 +17,12 @@ class SiteConfig:
     dry_run: bool
     dist_dir: Path
     data_dir: Path
-    affiliate_hysa_url: str = ""
-    affiliate_broker_url: str = ""
-    affiliate_pod_url: str = ""
-    affiliate_property_url: str = ""
-    gumroad_product_url: str = ""
+    affiliate_hysa_url: str = "https://link.coupang.com/a/iSVpT5nClE"
+    affiliate_broker_url: str = "https://link.coupang.com/a/iSVpT5nClE"
+    affiliate_pod_url: str = "https://link.coupang.com/a/iSVrev2q5s"
+    affiliate_property_url: str = "https://link.coupang.com/a/iSVq4TcSLA"
+    gumroad_product_url: str = "https://github.com/dream8837z/passive-income-microsaas-autopilot/releases/download/v1.0.0/WealthStack_Passive_Income_NNN_Pro_Pack_v1.zip"
+    coupang_partner_id: str = "AF9272027"
 
     @property
     def adsense_pub_id(self) -> str:
@@ -66,9 +67,9 @@ def load_config(project_root: Path | None = None) -> SiteConfig:
         dry_run=os.environ.get("DRY_RUN", "false").lower() == "true",
         dist_dir=root / "dist",
         data_dir=root / "data",
-        affiliate_hysa_url=os.environ.get("AFFILIATE_HYSA_URL", "").strip(),
-        affiliate_broker_url=os.environ.get("AFFILIATE_BROKER_URL", "").strip(),
-        affiliate_pod_url=os.environ.get("AFFILIATE_POD_URL", "").strip(),
-        affiliate_property_url=os.environ.get("AFFILIATE_PROPERTY_URL", "").strip(),
-        gumroad_product_url=os.environ.get("GUMROAD_PRODUCT_URL", "").strip(),
+        affiliate_hysa_url=os.environ.get("AFFILIATE_HYSA_URL", "").strip() or "https://link.coupang.com/a/iSVpT5nClE",
+        affiliate_broker_url=os.environ.get("AFFILIATE_BROKER_URL", "").strip() or "https://link.coupang.com/a/iSVpT5nClE",
+        affiliate_pod_url=os.environ.get("AFFILIATE_POD_URL", "").strip() or "https://link.coupang.com/a/iSVrev2q5s",
+        affiliate_property_url=os.environ.get("AFFILIATE_PROPERTY_URL", "").strip() or "https://link.coupang.com/a/iSVq4TcSLA",
+        gumroad_product_url=os.environ.get("GUMROAD_PRODUCT_URL", "").strip() or "https://github.com/dream8837z/passive-income-microsaas-autopilot/releases/download/v1.0.0/WealthStack_Passive_Income_NNN_Pro_Pack_v1.zip",
     )
