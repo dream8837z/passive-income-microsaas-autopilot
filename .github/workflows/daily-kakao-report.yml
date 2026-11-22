@@ -1,0 +1,26 @@
+name: Daily 09:00 KST KakaoTalk Automated Status Report
+
+on:
+  schedule:
+    # 매일 오전 09:00 KST (00:00 UTC) 클라우드 무인 카카오톡 리포트 발송 (PC 꺼져 있어도 동작)
+    - cron: "0 0 * * *"
+  workflow_dispatch:
+
+jobs:
+  send-kakao-report:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Check all 3 pipelines (713 pages) & send KakaoTalk report
+        env:
+          KAKAO_REST_API_KEY: ${{ secrets.KAKAO_REST_API_KEY }}
+          KAKAO_CLIENT_SECRET: ${{ secrets.KAKAO_CLIENT_SECRET }}
+          KAKAO_REFRESH_TOKEN: ${{ secrets.KAKAO_REFRESH_TOKEN }}
+        run: python3 kakao_daily_report.py

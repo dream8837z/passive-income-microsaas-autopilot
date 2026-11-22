@@ -16,8 +16,20 @@ ROOT_DIR = Path(__file__).resolve().parent
 TOKEN_FILE = ROOT_DIR / ".kakao_tokens.json"
 
 
-def refresh_kakao_token(tokens: dict[str, Any]) -> dict[str, Any]:
-    """Always refresh access_token using refresh_token and persist any rotated refresh_token."""
+def load_or_refresh_tokens() -> dict[str, Any]:
+    """Load Kakao tokens from GitHub Actions env vars (cloud) or local .kakao_tokens.json."""
+    env_key = os.environ.get("KAKAO_REST_API_KEY", "").strip()
+    env_sec = os.environ.get("KAKAO_CLIENT_SECRET", "").strip()
+    env_ref = os.environ.get("KAKAO_REFRESH_TOKEN", "").strip()
+    if env_key and env_ref:
+        tokens: dict[str, Any] = {
+            "rest_api_key": env_key,
+            "client_secret": env_sec,
+            "refresh_token": env_ref,
+        }
+    else:
+        tokens = json.loads(TOKEN_FILE.read_text(encoding="utf-8"))
+
     data = urllib.parse.urlencode(
         {
             "grant_type": "refresh_token",
@@ -37,8 +49,9 @@ def refresh_kakao_token(tokens: dict[str, Any]) -> dict[str, Any]:
     tokens["access_token"] = res["access_token"]
     if res.get("refresh_token"):
         tokens["refresh_token"] = res["refresh_token"]
-    TOKEN_FILE.write_text(json.dumps(tokens, indent=2, ensure_ascii=False), encoding="utf-8")
-    os.chmod(TOKEN_FILE, 0o600)
+    if TOKEN_FILE.exists() or not env_key:
+        TOKEN_FILE.write_text(json.dumps(tokens, indent=2, ensure_ascii=False), encoding="utf-8")
+        os.chmod(TOKEN_FILE, 0o600)
     return tokens
 
 
@@ -157,8 +170,7 @@ def send_kakao_memo(access_token: str, text: str) -> dict[str, Any]:
 
 
 def main() -> None:
-    tokens = json.loads(TOKEN_FILE.read_text(encoding="utf-8"))
-    tokens = refresh_kakao_token(tokens)
+    tokens = load_or_refresh_tokens()
     text, summary = build_report_text()
     res = send_kakao_memo(tokens["access_token"], text)
     print(json.dumps({"kakao_result": res, "message": text, "summary": summary}, indent=2, ensure_ascii=False))
