@@ -1,9 +1,9 @@
-name: Daily 09:00 KST KakaoTalk Automated Status Report
+name: Daily 18:00 KST KakaoTalk Automated Status Report
 
 on:
   schedule:
-    # 매일 오전 09:00 KST (00:00 UTC) 클라우드 무인 카카오톡 리포트 발송 (PC 꺼져 있어도 동작)
-    - cron: "0 0 * * *"
+    # 매일 오후 6시 / 18:00 KST (09:00 UTC) 클라우드 무인 카카오톡 리포트 발송 (PC 꺼져 있어도 동작)
+    - cron: "0 9 * * *"
   workflow_dispatch:
 
 jobs:
