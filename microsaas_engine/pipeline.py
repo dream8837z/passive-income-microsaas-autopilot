@@ -8,6 +8,11 @@ from pathlib import Path
 from typing import Any
 
 from .apps_builder import build_all_micro_apps
+from .autonomous_ops import (
+    evolve_daily_market_brief,
+    publish_to_google_blogger_if_enabled,
+    verify_google_oauth_auto_login,
+)
 from .config import SiteConfig, load_config
 from .data_fetcher import fetch_live_market_data
 from .pseo_pages import (
@@ -37,10 +42,14 @@ def run_pipeline(cfg: SiteConfig | None = None) -> dict[str, Any]:
 
     all_urls: list[str] = []
 
-    # 1. Build 4 interactive Vibe-Coded Micro-SaaS apps
+    # 1. Build 4 interactive Vibe-Coded Micro-SaaS apps + 1 Self-Evolving Market Brief
     for rel, html_doc in build_all_micro_apps(cfg, market):
         _write_file(cfg.dist_dir, rel, html_doc)
         all_urls.append(rel)
+
+    brief_rel, brief_doc, evolution_entry = evolve_daily_market_brief(cfg, market)
+    _write_file(cfg.dist_dir, brief_rel, brief_doc)
+    all_urls.append(brief_rel)
 
     # 2. Build 104 pSEO long-tail pages
     hysa_pages = build_hysa_pages(cfg, market)
@@ -117,12 +126,28 @@ def run_pipeline(cfg: SiteConfig | None = None) -> dict[str, Any]:
     )
     _write_file(cfg.dist_dir, ".nojekyll", "")
 
-    # 5. Run automated SEO & integrity audit
+    # 5. Run automated SEO & integrity audit + Google OAuth auto-login check
     audit = audit_dist(cfg)
+    google_auth = {"ok": False, "reason": "dry_run"} if cfg.dry_run else verify_google_oauth_auto_login()
+    blogger_pub = {"published": False, "reason": "skipped"}
+    if not cfg.dry_run and google_auth.get("ok") and google_auth.get("has_blogger"):
+        import os
+        blog_id = os.environ.get("BLOGGER_BLOG_ID", "").strip()
+        if blog_id:
+            blogger_pub = publish_to_google_blogger_if_enabled(
+                google_auth["access_token"],
+                blog_id,
+                f"Passive Income & FX Brief ({updated})",
+                f"<p>Today's Regime: {evolution_entry['fx_regime']}. Full tools at <a href='{cfg.site_url}/{brief_rel}'>{cfg.site_url}</a>.</p>",
+            )
+
     summary = {
         "updated_date": updated,
         "fx_source": market["fx_source"],
         "fx_date": market["fx_date"],
+        "evolution": evolution_entry,
+        "google_oauth_ready": bool(google_auth.get("ok")),
+        "blogger_publish": blogger_pub,
         "audit": audit,
     }
     if audit["status"] != "PASS":

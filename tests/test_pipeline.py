@@ -75,8 +75,10 @@ class TestFullPipelineBuild(unittest.TestCase):
             result = run_pipeline(cfg)
             self.assertEqual(result["audit"]["status"], "PASS")
             self.assertEqual(result["audit"]["error_count"], 0)
-            self.assertEqual(result["audit"]["page_count"], 113)
+            self.assertEqual(result["audit"]["page_count"], 114)
             self.assertTrue((cfg.dist_dir / "apps/clutch-driving-instructor.html").exists())
+            self.assertTrue((cfg.dist_dir / "apps/autonomous-market-brief.html").exists())
+            self.assertTrue((cfg.data_dir / "evolution_ledger.json").exists())
             self.assertTrue((cfg.dist_dir / "ads.txt").exists())
             self.assertTrue((cfg.dist_dir / "sitemap.xml").exists())
 
