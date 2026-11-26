@@ -245,9 +245,18 @@ def send_kakao_memo(access_token: str, text: str) -> dict[str, Any]:
 
 
 def main() -> None:
+    import sys
+    silent_if_ok = "--silent-if-ok" in sys.argv
     rotate_log_if_needed()
     tokens = load_or_refresh_tokens()
     text, summary = build_report_text()
+    any_healed = any(
+        summary[k]["run"].get("healed") == "retriggered"
+        for k in ("pseo", "wealthstack", "toolforge")
+    )
+    if silent_if_ok and summary["all_ok"] and not any_healed:
+        print(json.dumps({"kakao_result": "skipped_silent_ok", "summary": summary}, indent=2, ensure_ascii=False))
+        return
     res = send_kakao_memo(tokens["access_token"], text)
     print(json.dumps({"kakao_result": res, "message": text, "summary": summary}, indent=2, ensure_ascii=False))
 

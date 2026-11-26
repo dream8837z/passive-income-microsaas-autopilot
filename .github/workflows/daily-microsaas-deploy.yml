@@ -5,7 +5,8 @@ on:
     branches:
       - main
   schedule:
-    - cron: "30 19 * * *"
+    # 매일 4회 (04:30, 10:30, 16:30, 22:30 KST) 고빈도 환율 동기화 · 자율 진화 · 배포
+    - cron: "30 1,7,13,19 * * *"
   workflow_dispatch:
 
 permissions:
